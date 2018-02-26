@@ -159,7 +159,7 @@ void DrawSnake( BITMAP *buffer, Snake *snake )
 bool WallCollision( Snake *snake )
 {
     
-    return snake->head->x < 0 || snake->head->x > SCREEN_WITDH - PIECE_SIZE || snake->head->y < 0 || snake->head->y > SCREEN_HEIGHT - PIECE_SIZE;
+    return snake->head->x < 0 || snake->head->x + PIECE_SIZE > SCREEN_WITDH || snake->head->y < 0 || snake->head->y + PIECE_SIZE > SCREEN_HEIGHT;
     
 }
 

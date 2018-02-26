@@ -49,14 +49,18 @@ int main( void )
     srand( time(NULL) );
     
     BITMAP *buffer;
+    SAMPLE *snake_attack;
+    SAMPLE *game_over;
     Snake *snake;
     Food *food = NULL;
+    int score = 0;
     
     
     allegro_init( );
     install_mouse( );
     install_timer( );
     install_keyboard( );
+    install_sound( DIGI_AUTODETECT, MIDI_AUTODETECT, NULL );
     set_color_depth( 24 );
     set_window_title("Snake");
     if(  set_gfx_mode( GFX_AUTODETECT_WINDOWED , SCREEN_WITDH , SCREEN_HEIGHT , 0 ,0 )  )
@@ -65,12 +69,25 @@ int main( void )
         ExitProgram( );
     }
     
+    
+    
     if( !(  buffer = create_bitmap( SCREEN_WITDH , SCREEN_HEIGHT ) ) )
     {
         ShowMessage("Erro ao criar buffer");
         ExitProgram( );
     }
     
+    if( !( snake_attack = load_sample("../sound/snake_attack.wav") ) )
+    {
+        ShowMessage("Erro ao carregar efeito de ataque da cobra");
+        ExitProgram( );
+    }
+
+    if( !( game_over = load_sample("../sound/game_over.wav") ) )
+    {
+        ShowMessage("Erro ao carregar efeito de gameover");
+        ExitProgram( );
+    }
     
     if( !( snake = CreateSnake( ) ) )
     {
@@ -125,14 +142,17 @@ int main( void )
         
         //mudanças
         if( AteFood( food , snake ) )
-        {
+        {   
+            play_sample( snake_attack , 255, 128 , 1000, false );
             SnakeAppendPiece( snake );          
             SetFoodPosition( food );
+            score++;
         }
         
         if( WallCollision( snake ) || SelfCollision( snake ) )
         {
-            ShowMessage("Colidiu");
+            play_sample( game_over , 255, 128 ,1000,false);
+            rest(1800);
             ExitProgram( );
         }
         
@@ -147,6 +167,8 @@ int main( void )
             DrawFood( buffer, food);
             DrawSnake( buffer, snake );
        
+            textprintf_ex( buffer ,font, 2 , 2, makecol( 0, 0, 0 ), -1,"Score: %d",score);
+            
             draw_sprite( screen , buffer , 0 , 0);
         }
         
@@ -157,6 +179,8 @@ int main( void )
     DestroyFood( food );
     DestroySnake( snake );
     destroy_bitmap( buffer );
+    destroy_sample( game_over );
+    destroy_sample( snake_attack);
     
     return 0;
     

@@ -34,7 +34,7 @@ void SetFoodPosition( Food *food )
 void DrawFood( BITMAP *buffer, Food *food )
 {
     
-    rectfill( buffer, food->x, food->y, food->x + FOOD_SIZE, food->y + FOOD_SIZE, makecol( 0, 0, 0 ) );
+    rectfill( buffer, food->x, food->y, food->x + FOOD_SIZE, food->y + FOOD_SIZE, makecol( 0, 255, 0 ) );
     
 }
 
