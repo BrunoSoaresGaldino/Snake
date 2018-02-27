@@ -171,7 +171,7 @@ int main( void )
             DrawSnake( buffer, snake );
             DrawObstacles( buffer );
        
-            textprintf_ex( buffer ,font, 2 , 2, makecol( 0, 0, 0 ), -1,"Score: %d",score);
+            textprintf_ex( buffer ,font, 2 , 2, makecol( 0, 0, 255 ), -1,"Score: %d",score);
             
             draw_sprite( screen , buffer , 0 , 0);
         }

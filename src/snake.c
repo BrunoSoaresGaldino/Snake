@@ -55,14 +55,14 @@ bool SnakeAppendPiece( Snake *snake )
         {
             piece->y = snake->tail->y;
             piece->direction = HORIZONTAL;
-            piece->x = snake->tail->x - snake->tail->way * PIECE_SIZE;// se way é negativo, adicona PIECE_SIZE à posicao da calda e atribui ao elemento que sera inserido
+            piece->x = snake->tail->x +  - snake->tail->way * POSITION_INCREMENT;// se way é negativo, adicona 1 à posicao da calda e atribui ao elemento que sera inserido
             
         }
         else
         {
             piece->x = snake->tail->x;
             piece->direction = VERTICAL;
-            piece->y = snake->tail->y - snake->tail->way * PIECE_SIZE;
+            piece->y = snake->tail->y - snake->tail->way * POSITION_INCREMENT;
             
         }
         
@@ -146,10 +146,8 @@ void DrawSnake( BITMAP *buffer, Snake *snake )
     
     while( piece )
     {
-        rectfill( buffer, piece->x, piece->y , piece->x + PIECE_SIZE, piece->y + PIECE_SIZE , makecol( 0 , 0 , 255 ) );
-        rect( buffer, piece->x, piece->y , piece->x + PIECE_SIZE, piece->y + PIECE_SIZE , makecol( 255 , 255 , 255 ) );
-        rectfill( buffer, piece->x + PIECE_BORDER, piece->y + PIECE_BORDER, piece->x + PIECE_SIZE - PIECE_BORDER, piece->y + PIECE_SIZE -PIECE_BORDER , makecol( 255 , 0 , 0 ) );
-        
+        rectfill( buffer, piece->x * ROWS, piece->y * COLS  , piece->x * ROWS + PIECE_SIZE, piece->y * COLS + PIECE_SIZE , makecol( 2555 , 0 , 0 ) );
+        rect( buffer, piece->x * ROWS , piece->y * COLS , piece->x * ROWS + PIECE_SIZE, piece->y * COLS + PIECE_SIZE , makecol( 255 , 255 , 255 ) );
         
         piece = piece->next;
     }
@@ -159,7 +157,7 @@ void DrawSnake( BITMAP *buffer, Snake *snake )
 bool WallCollision( Snake *snake )
 {
     
-    return snake->head->x < 0 || snake->head->x + PIECE_SIZE > SCREEN_WITDH || snake->head->y < 0 || snake->head->y + PIECE_SIZE > SCREEN_HEIGHT;
+    return snake->head->x < 0 || snake->head->x >= ROWS || snake->head->y < 0 || snake->head->y >= COLS;
     
 }
 

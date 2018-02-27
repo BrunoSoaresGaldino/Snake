@@ -5,11 +5,7 @@ extern unsigned short int screen_matrix[ROWS][COLS];
 
 void CreateObstacle( int x , int y )
 {
-    x /= ROWS;
-    y /= COLS;
-    
-    screen_matrix[x][y] = 1;
-    
+    screen_matrix[x][y] = OBSTACLE;
 }
 
 bool ObstacleCollision( Snake *snake )
@@ -21,9 +17,9 @@ bool ObstacleCollision( Snake *snake )
     {
         for( j = 0 ; j < COLS ; j++ )
         {
-            if( screen_matrix[i][j] == 1 )
+            if( screen_matrix[i][j] == OBSTACLE )
             {
-                if( i == snake->head->x/ ROWS && j == snake->head->y/COLS )
+                if( i == snake->head->x && j == snake->head->y )
                 {
                     return true;
                 }
@@ -43,7 +39,7 @@ void DrawObstacles(BITMAP *buffer )
     {
         for( j = 0 ; j < COLS ; j++ )
         {
-            if( screen_matrix[i][j] == 1 )
+            if( screen_matrix[i][j] == OBSTACLE )
             {
                 rectfill( buffer, i * ROWS , j * COLS, i * ROWS + OBSTACLE_SIZE, j * COLS + OBSTACLE_SIZE, makecol( 0, 0, 0 ) );
             }

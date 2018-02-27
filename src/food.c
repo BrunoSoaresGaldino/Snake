@@ -12,7 +12,7 @@ void SetFoodPosition( Food *food )
     
     }while(  screen_matrix[food->x][food->y] != 0 );
     
-    screen_matrix[food->x][food->y] = 2;
+    screen_matrix[food->x][food->y] = FOOD;
 }
 
 
@@ -27,9 +27,9 @@ void DrawFood( BITMAP *buffer, Food *food )
 bool AteFood( Food *food , Snake *snake )
 {
 
-    if( snake->head->x == food->x * ROWS && snake->head->y == food->y * COLS )
+    if( snake->head->x == food->x && snake->head->y == food->y )
     {
-        screen_matrix[food->x][food->y] = 0;
+        screen_matrix[food->x][food->y] = NONE;
         return true;
     }
     
