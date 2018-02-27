@@ -1,32 +1,18 @@
 
 #include "../include/food.h"
 
-Food *CreateFood( void )
-{
-    Food *food = calloc( 1, sizeof( Food ) );
-    
-    if( food )
-    {
-        SetFoodPosition( food );
-        return food;
-    }
-   
-    return NULL;
-
-}
-
-void DestroyFood( Food *food )
-{
-    if( food )
-    {
-        free( food );
-    }
-}
+extern unsigned short int screen_matrix[ROWS][COLS];
 
 void SetFoodPosition( Food *food )
 {
-    food->x = ( rand( ) % ROWS ) * ROWS;
-    food->y = ( rand( ) % COLS ) * COLS;
+    do
+    {
+        food->x = ( rand( ) % ROWS );
+        food->y = ( rand( ) % COLS );
+    
+    }while(  screen_matrix[food->x][food->y] != 0 );
+    
+    screen_matrix[food->x][food->y] = 2;
 }
 
 
@@ -34,12 +20,18 @@ void SetFoodPosition( Food *food )
 void DrawFood( BITMAP *buffer, Food *food )
 {
     
-    rectfill( buffer, food->x, food->y, food->x + FOOD_SIZE, food->y + FOOD_SIZE, makecol( 0, 255, 0 ) );
+    rectfill( buffer, food->x * ROWS, food->y * COLS, food->x *ROWS  + FOOD_SIZE, food->y * COLS + FOOD_SIZE, makecol( 0, 255, 0 ) );
     
 }
 
 bool AteFood( Food *food , Snake *snake )
 {
 
-    return snake->head->x == food->x && snake->head->y == food->y;
+    if( snake->head->x == food->x * ROWS && snake->head->y == food->y * COLS )
+    {
+        screen_matrix[food->x][food->y] = 0;
+        return true;
+    }
+    
+    return false;
 }

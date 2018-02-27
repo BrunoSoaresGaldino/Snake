@@ -4,8 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../include/food.h"
+#include "../include/defines.h"
 #include "../include/snake.h"
+#include "../include/food.h"
+#include "../include/obstacle.h"
 
 #define FRAMES_PER_SEC 3
 
@@ -52,8 +54,9 @@ int main( void )
     SAMPLE *snake_attack;
     SAMPLE *game_over;
     Snake *snake;
-    Food *food = NULL;
+    Food food;
     int score = 0;
+    int last_score = 0;
     
     
     allegro_init( );
@@ -95,13 +98,6 @@ int main( void )
         ExitProgram( );
     }        
 
-    if( !( food = CreateFood( ) ) )
-    {
-        ShowMessage("Erro ao criar comida");
-        ExitProgram( );
-    }    
-    
-
     LOCK_VARIABLE( exit_program );
     LOCK_FUNCTION( ExitProgram );
     set_close_button_callback( ExitProgram );
@@ -110,6 +106,7 @@ int main( void )
     LOCK_FUNCTION( SetTic );
     install_int_ex( SetTic, BPS_TO_TIMER( FRAMES_PER_SEC ) );
     
+    SetFoodPosition( &food );
     
     while( !exit_program )
     {
@@ -141,15 +138,21 @@ int main( void )
         }
         
         //mudanças
-        if( AteFood( food , snake ) )
+        if( (score+1) % 15 == 0 && score < 300 && score != last_score  )
+        {
+            last_score = score;
+            CreateObstacle( snake->tail->x, snake->tail->y );
+        }
+        
+        if( AteFood( &food , snake ) )
         {   
             play_sample( snake_attack , 255, 128 , 1000, false );
             SnakeAppendPiece( snake );          
-            SetFoodPosition( food );
+            SetFoodPosition( &food );
             score++;
         }
         
-        if( WallCollision( snake ) || SelfCollision( snake ) )
+        if( WallCollision( snake ) || SelfCollision( snake ) || ObstacleCollision( snake ) )
         {
             play_sample( game_over , 255, 128 ,1000,false);
             rest(1800);
@@ -164,8 +167,9 @@ int main( void )
             // desenho
             clear_to_color( buffer , makecol( 255 ,255 ,255 ) );
         
-            DrawFood( buffer, food);
+            DrawFood( buffer, &food);
             DrawSnake( buffer, snake );
+            DrawObstacles( buffer );
        
             textprintf_ex( buffer ,font, 2 , 2, makecol( 0, 0, 0 ), -1,"Score: %d",score);
             
@@ -176,7 +180,6 @@ int main( void )
         
     }
     
-    DestroyFood( food );
     DestroySnake( snake );
     destroy_bitmap( buffer );
     destroy_sample( game_over );

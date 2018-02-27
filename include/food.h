@@ -5,19 +5,8 @@
 #include <allegro.h>
 #include <stdbool.h>
 
-#include "snake.h"
+#include "defines.h"
 
-#define FOOD_SIZE 20
-
-typedef struct
-{
-    int x;
-    int y;
-    
-} Food;
-
-Food *CreateFood( void );
-void DestroyFood( Food *food );
 void SetFoodPosition( Food *food );
 void DrawFood( BITMAP *buffer, Food *food );
 bool AteFood( Food *food , Snake *snake );
