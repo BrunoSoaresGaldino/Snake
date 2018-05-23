@@ -144,10 +144,14 @@ void DrawSnake( BITMAP *buffer, Snake *snake )
     
     SnakePiece *piece = snake->head;
     
+    rectfill( buffer, piece->x * ROWS, piece->y * COLS  , piece->x * ROWS + PIECE_SIZE, piece->y * COLS + PIECE_SIZE , makecol( 255 , 242 , 0 ) );
+    
+    piece = piece->next;
+    
     while( piece )
     {
         rectfill( buffer, piece->x * ROWS, piece->y * COLS  , piece->x * ROWS + PIECE_SIZE, piece->y * COLS + PIECE_SIZE , makecol( 2555 , 0 , 0 ) );
-        rect( buffer, piece->x * ROWS , piece->y * COLS , piece->x * ROWS + PIECE_SIZE, piece->y * COLS + PIECE_SIZE , makecol( 255 , 255 , 255 ) );
+        rect( buffer, piece->x * ROWS, piece->y * COLS  , piece->x * ROWS + PIECE_SIZE, piece->y * COLS + PIECE_SIZE , makecol( 2555 , 255 , 255 ) );
         
         piece = piece->next;
     }
